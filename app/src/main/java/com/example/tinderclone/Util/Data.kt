@@ -10,3 +10,17 @@ data class User(
     val imageUrl: String? =""
 
 )
+
+data class Chat(
+    val userId: String? = "",
+    val chatId: String? = "",
+    val otherUserId: String? = "",
+    val name: String? = "",
+    val imageUrl: String? = ""
+)
+
+data class Message(
+    val sentBy: String? = null,
+    val message: String? = null,
+    val time: String? = null
+)
