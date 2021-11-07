@@ -49,7 +49,7 @@
       android:layout_marginStart="8dp"
       app:layout_constraintStart_toStartOf="parent"
       android:layout_marginLeft="8dp"
-      android:text="@string/signip_button_text"
+      android:text="@string/signup_button_text"
       tools:ignore="OnClick" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

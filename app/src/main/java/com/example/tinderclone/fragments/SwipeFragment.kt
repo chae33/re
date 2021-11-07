@@ -20,18 +20,21 @@ import kotlinx.android.synthetic.main.fragment_swipe.*
 
 class SwipeFragment : Fragment() {
     private var callback: TinderCallback? = null
-
     private lateinit var userId: String
     private lateinit var userDatabase: DatabaseReference
+    private lateinit var chatDatabase: DatabaseReference
     private var cardsAdapter: ArrayAdapter<User>? = null
     private var rowItems = ArrayList<User>()
     private var preferredGender: String? = null
+    private var userName: String? = null
+    private var imageUrl: String?= null
 
 
     fun setCallback(callback: TinderCallback){
         this.callback = callback
         userId = callback.onGetUserId()
         userDatabase = callback.getUserDatabase()
+        chatDatabase = callback.getChatDatabase()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,8 @@ class SwipeFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var user = snapshot.getValue(User::class.java)
                 preferredGender = user?.preferredGender
+                userName = user?.name
+                imageUrl = user?.imageUrl
                 populateItems()
             }
 
@@ -84,9 +89,26 @@ class SwipeFragment : Fragment() {
                             if(snapshot.hasChild(selectedUserId)) {
                                 Toast.makeText(context, "Match!", Toast.LENGTH_SHORT).show()
 
-                                userDatabase.child(userId).child(DATA_SWIPES_RIGHT).child(selectedUserId).removeValue()
-                                userDatabase.child(userId).child(DATA_MATCHES).child(selectedUserId).setValue(true)
-                                userDatabase.child(selectedUserId).child(DATA_MATCHES).child(userId).setValue(true)
+                                val chatKey = chatDatabase.push().key
+
+                                if(chatKey != null) {
+                                    userDatabase.child(userId).child(DATA_SWIPES_RIGHT)
+                                        .child(selectedUserId).removeValue()
+                                    userDatabase.child(userId).child(DATA_MATCHES)
+                                        .child(selectedUserId).setValue(true)
+                                    userDatabase.child(selectedUserId).child(DATA_MATCHES)
+                                        .child(userId).setValue(true)
+
+                                    chatDatabase.child(chatKey).child(userId).child(DATA_NAME).setValue(userName)
+                                    chatDatabase.child(chatKey).child(userId).child(DATA_IMAGE_URL)
+                                        .setValue(imageUrl)
+
+
+                                    chatDatabase.child(chatKey).child(selectedUserId).child(DATA_NAME)
+                                        .setValue(selectedUser.name)
+                                    chatDatabase.child(chatKey).child(selectedUserId).child(DATA_IMAGE_URL)
+                                        .setValue(selectedUser.imageUrl)
+                                }
                             }else{
                                 userDatabase.child(selectedUserId).child(DATA_SWIPES_RIGHT).child(userId).setValue(true)
                             }

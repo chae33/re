@@ -7,7 +7,7 @@
     android:layout_gravity="right">
 
     <TextView
-        android:id="@+id/messagedTV"
+        android:id="@+id/messageTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/chat_margin"

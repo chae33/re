@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.tinderclone.R
+import com.example.tinderclone.Util.DATA_CHATS
 import com.example.tinderclone.Util.DATA_USERS
 import com.example.tinderclone.activities.TinderActivity.Companion.newIntent
 import com.example.tinderclone.fragments.MatchesFragment
@@ -38,11 +39,11 @@ class TinderActivity : AppCompatActivity(),TinderCallback {
     private val firebaseAuth=FirebaseAuth.getInstance()
     private val userId=firebaseAuth.currentUser?.uid
     private lateinit var userDatabase:DatabaseReference
+    private lateinit var chatDatabase:DatabaseReference
 
     private var profileFragment: ProfileFragment?=null
     private var swipeFragment: SwipeFragment?=null
     private var matchesFragment: MatchesFragment?=null
-
 
     private var profileTab: TabLayout.Tab?=null
     private var swipeTab: TabLayout.Tab?=null
@@ -60,6 +61,7 @@ class TinderActivity : AppCompatActivity(),TinderCallback {
         }
 
         userDatabase=FirebaseDatabase.getInstance().reference.child(DATA_USERS)
+        chatDatabase=FirebaseDatabase.getInstance().reference.child((DATA_CHATS))
 
         profileTab = navigationTabs.newTab()
         swipeTab = navigationTabs.newTab()
@@ -166,10 +168,11 @@ class TinderActivity : AppCompatActivity(),TinderCallback {
 
     override fun onGetUserId(): String =userId!!
 
-    override fun getUserDatabase(): DatabaseReference =userDatabase
+    override fun getUserDatabase(): DatabaseReference = userDatabase
+
+    override fun getChatDatabase(): DatabaseReference = chatDatabase
 
     override fun profileComplete() {
-
         swipeTab?.select()
     }
 
