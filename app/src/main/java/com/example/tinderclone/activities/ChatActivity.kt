@@ -31,16 +31,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var messagesAdapter: MessagesAdapter
 
     private val chatMessagesListener = object : ChildEventListener {
-        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-        }
-
-        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-        }
-
-        override fun onChildRemoved(snapshot: DataSnapshot) {
-        }
-
-        override fun onChildMoved(p0: DataSnapshot, previousChildName: String?) {
+        override fun onChildAdded(p0: DataSnapshot, p1: String?) {
             val message = p0.getValue(Message::class.java)
             if (message != null) {
                 messagesAdapter.addMessage(message)
@@ -50,9 +41,18 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-        override fun onCancelled(error: DatabaseError) {
+        override fun onChildChanged(p0: DataSnapshot, p1: String?) {
         }
 
+        override fun onChildRemoved(p0: DataSnapshot) {
+        }
+
+        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+            val message = p0.getValue(Message::class.java)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,8 +108,7 @@ class ChatActivity : AppCompatActivity() {
 
 
     fun onSend(v: View) {
-        val message =
-            Message(userId, messageET.text.toString(), Calendar.getInstance().time.toString())
+        val message = Message(userId, messageET.text.toString(), Calendar.getInstance().time.toString())
         val key = chatDatabase.child(chatId!!).child(DATA_MESSAGES).push().key
         if (key.isNullOrEmpty()) {
             chatDatabase.child(chatId!!).child(DATA_MESSAGES).child(key.toString()).setValue(message)

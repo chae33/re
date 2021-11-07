@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.tinderclone.R
-import com.example.tinderclone.activities.TinderCallback
+import com.example.tinderclone.Util.Chat
 import com.example.tinderclone.Util.DATA_MATCHES
 import com.example.tinderclone.Util.User
+import com.example.tinderclone.activities.TinderCallback
+import com.example.tinderclone.adapters.ChatsAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -56,9 +59,9 @@ class MatchesFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
             }
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.hasChildren()){
-                    snapshot.children.forEach { child ->
+            override fun onDataChange(p0: DataSnapshot) {
+                if(p0.hasChildren()){
+                    p0.children.forEach { child ->
                         val matchId = child.key
                         val chatId = child.value.toString()
                         if(!matchId.isNullOrEmpty()){
@@ -67,9 +70,9 @@ class MatchesFragment : Fragment() {
                                 }
 
                                 override fun onDataChange(snapshot: DataSnapshot) {
-                                    val user = snapshot.getValue(User::class.java)
+                                    val user = p0.getValue(User::class.java)
                                     if(user != null){
-                                        val chat = chat(userId, chatId, user.uid, user.name, user.imageUrl)
+                                        val chat = Chat(userId, chatId, user.uid, user.name, user.imageUrl)
                                         chatsAdapter.addElement(chat)
                                     }
                                 }

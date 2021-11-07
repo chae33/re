@@ -17,7 +17,7 @@ class MessagesAdapter(private var messages: ArrayList<Message>, val userId: Stri
         val MESSAGE_OTHER_USER = 2
     }
     fun addMessage(message: Message){
-        message.add(message)
+        messages.add(message)
         notifyDataSetChanged()
     }
 
@@ -35,7 +35,7 @@ class MessagesAdapter(private var messages: ArrayList<Message>, val userId: Stri
 
     override fun getItemCount() = messages.size
 
-    override fun onBindViewHolder(holder: MessagesAdapter, position: Int) {
+    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         holder.bind(messages[position])
     }
 
@@ -52,8 +52,4 @@ class MessagesAdapter(private var messages: ArrayList<Message>, val userId: Stri
                 view.findViewById<TextView>(R.id.messageTV).text = message.message
             }
         }
-
-    override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-    }
-
 }
